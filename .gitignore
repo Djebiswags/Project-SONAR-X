@@ -1,0 +1,12 @@
+# Sensitive configuration
+config.json
+
+# Environment
+agent_env/
+__pycache__/
+*.pyc
+
+# Build artifacts
+build/
+dist/
+*.spec
