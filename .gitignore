@@ -1,12 +1,9 @@
-# Sensitive configuration
+# Configuration files (The Shield)
 config.json
 
-# Environment
+# Environment/Build folders
 agent_env/
-__pycache__/
-*.pyc
-
-# Build artifacts
 build/
 dist/
-*.spec
+__pycache__/
+*.pyc
