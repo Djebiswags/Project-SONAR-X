@@ -26,6 +26,18 @@ Project SONAR-X monitors system health in the background, surfaces CPU/RAM/netwo
 - Configurable defense: tune process mitigation with `config.json`
 - Visible telemetry: HUD and menu bar status indicators keep you informed
 
+## 👥 Who is this for?
+- macOS power users who want a lightweight local monitoring sentinel
+- Developers who need quick visibility into CPU, RAM and network status
+- People who want configurable process mitigation without heavy system tools
+- Anyone experimenting with Python-based desktop automation and telemetry
+
+## 💡 Use cases
+- Keep a laptop cool by automatically managing background apps
+- Test local process mitigation workflows in a reproducible Python app
+- Provide a simple monitoring utility for personal macOS/Unix machines
+- Build on this project for custom health checks and alerting
+
 ## 🧩 Requirements
 - Python 3.10+
 - `psutil`
