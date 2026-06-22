@@ -37,7 +37,13 @@ python3 sonar_menu.py
 ```
 
 ## ⚙️ Configuration
-Update `config.json` to customize which processes can be terminated during high CPU load:
+Create a local `config.json` from the tracked template:
+
+```bash
+cp config.example.json config.json
+```
+
+Then update `config.json` to customize which processes can be terminated during high CPU load.
 
 ```json
 {

@@ -21,3 +21,6 @@ agent_env/
 *~
 *.swp
 *.tmp
+
+# Local configuration
+config.json
