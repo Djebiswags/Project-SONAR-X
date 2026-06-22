@@ -69,6 +69,60 @@ pip install -r requirements.txt
   python3 dashboard.py
   ```
 
+## 🧹 Uninstall old installs
+If you previously installed SONAR-X with a launch agent or app bundle, remove old artifacts before switching to this source version.
+
+```bash
+launchctl unload ~/Library/LaunchAgents/com.oracle.sonarx.plist 2>/dev/null || true
+launchctl unload ~/Library/LaunchAgents/com.sonarx.app.plist 2>/dev/null || true
+rm -f ~/Library/LaunchAgents/com.oracle.sonarx.plist
+rm -f ~/Library/LaunchAgents/com.sonarx.app.plist
+rm -rf "$HOME/Library/Application Support/🎧 SONAR-X"
+```
+
+If you used an old virtualenv, remove that directory too.
+
+## 📦 Build a macOS App bundle
+For tech users who want a native `.app` bundle, install `py2app` and build SONAR-X as a macOS app.
+
+```bash
+source venv/bin/activate
+pip install py2app
+python3 setup.py py2app
+```
+
+Then open the generated app:
+
+```bash
+open dist/SONAR-X.app
+```
+
+## 📦 Packaging & Install (quick):
+
+- Create a compressed DMG for distribution:
+
+```bash
+rm -f dist/SONAR-X.dmg
+hdiutil create -volname "SONAR-X" -srcfolder dist/SONAR-X.app -ov -format UDZO dist/SONAR-X.dmg
+```
+
+- Install locally (copy the bundle to /Applications):
+
+```bash
+./scripts/install_sonar.sh
+```
+
+- Uninstall helper (removes bundle, app support, and launch agent):
+
+```bash
+./scripts/uninstall_sonar.sh
+```
+
+## 📌 Notes:
+- The build logged a set of "Modules not found" warnings for platform-conditional imports. These are typically safe; however `_tkinter` was reported missing — the HUD (`dashboard.py`) requires Tk; to include the HUD inside the .app you must build the .app using a Python interpreter that has `_tkinter` present (macOS system Python or a Python built with tcl/tk). See the "Troubleshooting" section.
+
+The built app launches the menu bar sentinel and retains the source-based config and dashboard behavior.
+
 ## ⚙️ Configuration
 Create a local `config.json` from the tracked template:
 
