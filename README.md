@@ -1,27 +1,67 @@
-# Project SONAR-X: Automated System Sentinel
-
-Project SONAR-X is a lightweight, automated telemetry daemon built for macOS. It acts as a smart guard dog for computer systems, monitoring hardware health and network status in real-time, and executing automated defensive protocols before system failure occurs.
-
-## Core Architecture & Features
-* **Real-Time Telemetry:** Monitors CPU load via `psutil` within a dedicated background thread.
-* **Network Sniffer:** Continuously pings external servers to verify active internet connection status.
-* **Automated Cooling Protocol:** Integrates with local software to automatically reduce system load (e.g., dropping audio volumes) when the CPU redlines past 85%.
-* **macOS Daemon Integration:** Runs headlessly in the macOS Menu Bar utilizing `rumps` and a custom `launchctl` `.plist` agent for persistent startup execution.
-* **Hot-Key Macros:** Global keyboard listeners via `pynput` for instant system-wide script execution.
-
-## Deployment
-See `requirements.txt` for Python dependencies. The application is designed to be loaded into the macOS user space via the included `mac_startup_daemon.plist`.
-=======
 # Project SONAR-X
-A high-performance macOS system daemon and telemetry suite.
 
-## Features
-- Persistent background monitoring using `launchd`.
-- Asynchronous resource optimization via intelligent process termination.
-- Custom GUI dashboard for real-time system telemetry.
+Project SONAR-X is an automated system sentinel for macOS and Unix environments. It combines menu-bar monitoring, live telemetry HUD display, and configurable defensive actions.
 
-## Deployment
-1. Clone the repository.
-2. Setup the virtual environment: `python3 -m venv agent_env`.
-3. Install dependencies: `pip install -r requirements.txt`.
-4. Deploy the daemon: `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.sonarx.app.plist`.
+## 🧠 Overview
+Project SONAR-X keeps monitoring logic separate from the user interface, with a lightweight menu-bar sentinel and an optional live dashboard.
+
+- **`sonar_menu.py`**: Menu-bar app and sentinel controller.
+- **`dashboard.py`**: Live telemetry HUD showing CPU and RAM usage.
+- **`sonar_core.py`**: CLI pulse engine for system monitoring.
+- **`config.json`**: Process kill list for automated cooling mode.
+- **`mac_startup_daemon.plist`**: macOS launchd agent for persistent startup.
+
+## ✨ Features
+- Start and stop monitoring from the macOS menu bar.
+- Live CPU and network status updates.
+- Automated cooling mode when CPU load exceeds thresholds.
+- Config-driven process mitigation based on `config.json`.
+- Desktop notifications for status changes and critical events.
+
+## 🧩 Requirements
+- Python 3.10+
+- `psutil`
+- `requests`
+- `rumps`
+- `customtkinter`
+
+## 🚀 Installation
+
+```bash
+git clone https://github.com/Djebiswags/Project-SONAR-X.git
+cd Project-SONAR-X
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python3 sonar_menu.py
+```
+
+## ⚙️ Configuration
+Update `config.json` to customize which processes can be terminated during high CPU load:
+
+```json
+{
+    "kill_list": [
+        "Google Chrome Helper",
+        "OneDrive",
+        "Dropbox",
+        "Adobe Desktop Service",
+        "Creative Cloud",
+        "Spotify",
+        "EpicGamesLauncher"
+    ]
+}
+```
+
+## 🧪 Running the HUD
+Launch the HUD from the menu bar using the `📊 Launch Visual HUD` action, or run:
+
+```bash
+python3 dashboard.py
+```
+
+## 📌 Notes
+- `sonar_menu.py` launches the dashboard with the active Python interpreter.
+- The application is designed for macOS, but core monitoring logic can run on other Unix-like systems.
+- Use `launchctl` with `mac_startup_daemon.plist` for persistent startup on macOS.
+

@@ -39,8 +39,9 @@ class SonarXApp(rumps.App):
 
     @rumps.clicked("📊 Launch Visual HUD")
     def open_dashboard(self, _):
-        # Use the full path to ensure the HUD can find its own environment
-        subprocess.Popen(["/Users/oracle/agent_env/bin/python3", "/Users/oracle/Project-SONAR-X/dashboard.py"])
+        # Launch the dashboard using the active Python interpreter.
+        dashboard_path = os.path.join(os.path.dirname(__file__), "dashboard.py")
+        subprocess.Popen([sys.executable, dashboard_path])
 
     def execute_silent_kill(self):
         # The Silent Assassin Logic

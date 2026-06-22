@@ -1,9 +1,23 @@
-# Configuration files (The Shield)
-config.json
-
-# Environment/Build folders
-agent_env/
-build/
-dist/
+# Python bytecode caches
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# Local runtime logs and temporary files
+sonar_log.txt
+.DS_Store
+
+# Virtual environments and local runtime folders
+venv/
+agent_env/
+.env
+
+# macOS system artifacts
+.AppleDouble
+.LSOverride
+
+# Backup files
+*~
+*.swp
+*.tmp
