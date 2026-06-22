@@ -66,7 +66,9 @@ Launch the HUD from the menu bar using the `📊 Launch Visual HUD` action, or r
 python3 dashboard.py
 ```
 
-## � License
+> Note: `dashboard.py` requires a Python installation with Tkinter support. If your current Python build does not include Tkinter, the HUD will not launch.
+
+## 📄 License
 This project is released under the MIT License. See `LICENSE` for details.
 
 ## �📌 Notes
