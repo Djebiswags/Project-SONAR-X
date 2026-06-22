@@ -33,8 +33,21 @@ cd Project-SONAR-X
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-python3 sonar_menu.py
 ```
+
+## ▶️ Usage
+- Start the menu-bar sentinel:
+  ```bash
+  python3 sonar_menu.py
+  ```
+- Run one monitoring cycle for validation:
+  ```bash
+  python3 sonar_core.py --once
+  ```
+- Launch the HUD directly:
+  ```bash
+  python3 dashboard.py
+  ```
 
 ## ⚙️ Configuration
 Create a local `config.json` from the tracked template:
@@ -71,7 +84,7 @@ python3 dashboard.py
 ## 📄 License
 This project is released under the MIT License. See `LICENSE` for details.
 
-## �📌 Notes
+## 📌 Notes
 - `sonar_menu.py` launches the dashboard with the active Python interpreter.
 - The application is designed for macOS, but core monitoring logic can run on other Unix-like systems.
 - Use `launchctl` with `mac_startup_daemon.plist` for persistent startup on macOS.
