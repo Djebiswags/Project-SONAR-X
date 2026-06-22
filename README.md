@@ -1,5 +1,7 @@
 # Project SONAR-X
 
+[![License](https://img.shields.io/github/license/Djebiswags/Project-SONAR-X.svg)](LICENSE) [![GitHub stars](https://img.shields.io/github/stars/Djebiswags/Project-SONAR-X?style=social)](https://github.com/Djebiswags/Project-SONAR-X/stargazers) [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org)
+
 A lightweight macOS/Unix system sentinel for real-time telemetry, adaptive CPU cooling, and configurable process mitigation.
 
 ## 🧠 About
@@ -12,11 +14,17 @@ Project SONAR-X monitors system health in the background, surfaces CPU/RAM/netwo
 - **`mac_startup_daemon.plist`**: Launchd agent for optional persistent startup.
 
 ## ✨ Features
-- Start and stop monitoring from the macOS menu bar.
-- Live CPU and network status updates.
-- Automated cooling mode when CPU load exceeds thresholds.
-- Config-driven process mitigation based on `config.json`.
-- Desktop notifications for status changes and critical events.
+- Start and stop monitoring from the macOS menu bar
+- Live CPU and network status updates
+- Automated cooling mode when CPU load exceeds thresholds
+- Config-driven process mitigation using a user-defined kill list
+- Desktop notifications for status changes and critical events
+
+## 🚀 Why SONAR-X?
+- Low overhead: designed for background use on personal macOS/Unix systems
+- Easy setup: install dependencies and run the menu app in minutes
+- Configurable defense: tune process mitigation with `config.json`
+- Visible telemetry: HUD and menu bar status indicators keep you informed
 
 ## 🧩 Requirements
 - Python 3.10+
