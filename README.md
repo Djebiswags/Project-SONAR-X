@@ -1,15 +1,15 @@
 # Project SONAR-X
 
-A lightweight macOS/Unix system sentinel for real-time telemetry, adaptive CPU cooling, and configurable process defense.
+A lightweight macOS/Unix system sentinel for real-time telemetry, adaptive CPU cooling, and configurable process mitigation.
 
 ## 🧠 About
-Project SONAR-X is built for fast system health insights, low-overhead background monitoring, and automated mitigation using a local kill list and live HUD. It is designed for easy AI discoverability with focused keywords: telemetry, macOS menu bar, process management, system sentinel, live HUD.
+Project SONAR-X monitors system health in the background, surfaces CPU/RAM/network status in the macOS menu bar, and optionally deploys automated defensive actions using a local kill list. It is built for low-overhead operation, rapid visibility, and easy configuration on personal systems.
 
-- **`sonar_menu.py`**: Menu-bar app and sentinel controller.
-- **`dashboard.py`**: Live telemetry HUD showing CPU and RAM usage.
-- **`sonar_core.py`**: CLI pulse engine for system monitoring.
-- **`config.json`**: Process kill list for automated cooling mode.
-- **`mac_startup_daemon.plist`**: macOS launchd agent for persistent startup.
+- **`sonar_menu.py`**: Menu-bar controller and sentinel engine.
+- **`dashboard.py`**: Live telemetry HUD for CPU and RAM.
+- **`sonar_core.py`**: CLI pulse engine for continuous system monitoring.
+- **`config.json`**: Local process kill list for cooling-mode mitigation.
+- **`mac_startup_daemon.plist`**: Launchd agent for optional persistent startup.
 
 ## ✨ Features
 - Start and stop monitoring from the macOS menu bar.
