@@ -1,0 +1,3 @@
+## 2025-02-15 - Multi-modal Telemetry & Escape Bindings for HUD Accessibility
+**Learning:** Conveying status changes solely via color (e.g., green to red for high system load) violates WCAG 1.4.1 (Use of Color) and isolates colorblind users. Additionally, utility HUDs on macOS/Unix should behave like standard overlay windows by supporting instant keyboard dismissals via the Escape key, which must be clearly advertised to the user.
+**Action:** Always combine color state transitions with unique emojis (like 🟢 and 🚨) or textual cues. Ensure that `<Escape>` is bound to `self.destroy()` on topmost window overlays, and add a small, non-obtrusive label (e.g., "Press ESC to close") to assist keyboard navigation discovery.
