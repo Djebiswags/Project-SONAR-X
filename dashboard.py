@@ -24,6 +24,10 @@ def create_dashboard():
             self.title("SONAR-X | Live Telemetry")
             self.geometry("350x200")
             self.attributes("-topmost", True)
+            self._after_id = None
+
+            # Keyboard accessibility: Bind Escape key to close/destroy the HUD
+            self.bind_all("<Escape>", lambda event: self.destroy())
 
             self.grid_rowconfigure(0, weight=1)
             self.grid_rowconfigure(1, weight=1)
@@ -31,7 +35,7 @@ def create_dashboard():
 
             self.cpu_label = ctk.CTkLabel(
                 self,
-                text="CPU Load: --%",
+                text="🟢 CPU Load: --%",
                 font=("Helvetica", 24, "bold"),
                 text_color="#00FFCC",
             )
@@ -46,10 +50,22 @@ def create_dashboard():
             cpu = psutil.cpu_percent()
             ram = psutil.virtual_memory().percent
             cpu_color = "#FF3333" if cpu > 80 else "#00FFCC"
+            indicator = "🚨" if cpu > 80 else "🟢"
 
-            self.cpu_label.configure(text=f"CPU Load: {cpu}%", text_color=cpu_color)
+            # Multi-modal indicators (emoji + color) to assist colorblind users (WCAG 1.4.1)
+            self.cpu_label.configure(text=f"{indicator} CPU Load: {cpu}%", text_color=cpu_color)
             self.ram_label.configure(text=f"RAM Usage: {ram}%")
-            self.after(1500, self.update_telemetry)
+            self._after_id = self.after(1500, self.update_telemetry)
+
+        def destroy(self):
+            # Clean up scheduled after task to prevent memory leaks and Tcl/threading errors
+            if self._after_id is not None:
+                try:
+                    self.after_cancel(self._after_id)
+                except Exception:
+                    pass
+                self._after_id = None
+            super().destroy()
 
     return SonarHUD()
 
