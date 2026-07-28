@@ -29,27 +29,59 @@ def create_dashboard():
             self.grid_rowconfigure(1, weight=1)
             self.grid_columnconfigure(0, weight=1)
 
+            self._update_job = None
+
             self.cpu_label = ctk.CTkLabel(
                 self,
-                text="CPU Load: --%",
+                text="🟢 CPU Load: --%",
                 font=("Helvetica", 24, "bold"),
                 text_color="#00FFCC",
             )
             self.cpu_label.grid(row=0, column=0, pady=20)
 
-            self.ram_label = ctk.CTkLabel(self, text="RAM Usage: --%", font=("Helvetica", 18))
+            self.ram_label = ctk.CTkLabel(
+                self,
+                text="🟢 RAM Usage: --%",
+                font=("Helvetica", 18),
+                text_color="#00FFCC",
+            )
             self.ram_label.grid(row=1, column=0, pady=10)
+
+            # Bind Escape key to close the window (keyboard accessibility)
+            self.bind_all("<Escape>", lambda event: self.destroy())
 
             self.update_telemetry()
 
         def update_telemetry(self):
             cpu = psutil.cpu_percent()
             ram = psutil.virtual_memory().percent
-            cpu_color = "#FF3333" if cpu > 80 else "#00FFCC"
 
-            self.cpu_label.configure(text=f"CPU Load: {cpu}%", text_color=cpu_color)
-            self.ram_label.configure(text=f"RAM Usage: {ram}%")
-            self.after(1500, self.update_telemetry)
+            # Multi-modal indicators to assist colorblind users (WCAG 1.4.1)
+            if cpu > 80:
+                cpu_color = "#FF3333"
+                cpu_prefix = "🚨 "
+            else:
+                cpu_color = "#00FFCC"
+                cpu_prefix = "🟢 "
+
+            if ram > 80:
+                ram_color = "#FF3333"
+                ram_prefix = "🚨 "
+            else:
+                ram_color = "#00FFCC"
+                ram_prefix = "🟢 "
+
+            self.cpu_label.configure(text=f"{cpu_prefix}CPU Load: {cpu}%", text_color=cpu_color)
+            self.ram_label.configure(text=f"{ram_prefix}RAM Usage: {ram}%", text_color=ram_color)
+
+            self._update_job = self.after(1500, self.update_telemetry)
+
+        def destroy(self):
+            # Overridden to prevent memory leaks and threading errors on teardown
+            if self._update_job is not None:
+                self.after_cancel(self._update_job)
+                self._update_job = None
+            super().destroy()
 
     return SonarHUD()
 
