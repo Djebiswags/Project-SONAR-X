@@ -24,6 +24,10 @@ def create_dashboard():
             self.title("SONAR-X | Live Telemetry")
             self.geometry("350x200")
             self.attributes("-topmost", True)
+            self._update_job = None
+
+            # Accessibility: Bind Escape key globally to dismiss/close the HUD
+            self.bind_all("<Escape>", lambda e: self.destroy())
 
             self.grid_rowconfigure(0, weight=1)
             self.grid_rowconfigure(1, weight=1)
@@ -31,7 +35,7 @@ def create_dashboard():
 
             self.cpu_label = ctk.CTkLabel(
                 self,
-                text="CPU Load: --%",
+                text="🟢 CPU Load: --%",
                 font=("Helvetica", 24, "bold"),
                 text_color="#00FFCC",
             )
@@ -45,11 +49,25 @@ def create_dashboard():
         def update_telemetry(self):
             cpu = psutil.cpu_percent()
             ram = psutil.virtual_memory().percent
-            cpu_color = "#FF3333" if cpu > 80 else "#00FFCC"
 
-            self.cpu_label.configure(text=f"CPU Load: {cpu}%", text_color=cpu_color)
+            # Accessibility: Combine color changes with distinct emojis (WCAG 1.4.1)
+            if cpu > 80:
+                cpu_color = "#FF3333"
+                cpu_emoji = "🚨"
+            else:
+                cpu_color = "#00FFCC"
+                cpu_emoji = "🟢"
+
+            self.cpu_label.configure(text=f"{cpu_emoji} CPU Load: {cpu}%", text_color=cpu_color)
             self.ram_label.configure(text=f"RAM Usage: {ram}%")
-            self.after(1500, self.update_telemetry)
+            self._update_job = self.after(1500, self.update_telemetry)
+
+        def destroy(self):
+            # Clean up pending .after() callbacks to prevent memory leaks and Tcl errors
+            if self._update_job is not None:
+                self.after_cancel(self._update_job)
+                self._update_job = None
+            super().destroy()
 
     return SonarHUD()
 
