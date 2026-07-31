@@ -5,6 +5,7 @@ import sys
 def _import_customtkinter():
     try:
         import customtkinter as ctk
+
         return ctk
     except ModuleNotFoundError as exc:
         raise RuntimeError(
@@ -37,19 +38,43 @@ def create_dashboard():
             )
             self.cpu_label.grid(row=0, column=0, pady=20)
 
-            self.ram_label = ctk.CTkLabel(self, text="RAM Usage: --%", font=("Helvetica", 18))
+            self.ram_label = ctk.CTkLabel(
+                self, text="RAM Usage: --%", font=("Helvetica", 18)
+            )
             self.ram_label.grid(row=1, column=0, pady=10)
 
+            # Globally bind the Escape key to close the topmost utility window
+            self.bind_all("<Escape>", lambda event: self.destroy())
+
+            self._after_id = None
             self.update_telemetry()
 
         def update_telemetry(self):
             cpu = psutil.cpu_percent()
             ram = psutil.virtual_memory().percent
+
+            # Multi-modal indicators (emojis 🟢 and 🚨) for colorblind accessibility (WCAG 1.4.1)
+            cpu_icon = "🚨" if cpu > 80 else "🟢"
             cpu_color = "#FF3333" if cpu > 80 else "#00FFCC"
 
-            self.cpu_label.configure(text=f"CPU Load: {cpu}%", text_color=cpu_color)
-            self.ram_label.configure(text=f"RAM Usage: {ram}%")
-            self.after(1500, self.update_telemetry)
+            ram_icon = "🚨" if ram > 80 else "🟢"
+            ram_color = "#FF3333" if ram > 80 else "#FFFFFF"
+
+            self.cpu_label.configure(
+                text=f"CPU Load: {cpu_icon} {cpu}%", text_color=cpu_color
+            )
+            self.ram_label.configure(
+                text=f"RAM Usage: {ram_icon} {ram}%", text_color=ram_color
+            )
+
+            self._after_id = self.after(1500, self.update_telemetry)
+
+        def destroy(self):
+            # Cancel scheduled callback to prevent memory leaks or Tcl errors on teardown
+            if self._after_id is not None:
+                self.after_cancel(self._after_id)
+                self._after_id = None
+            super().destroy()
 
     return SonarHUD()
 

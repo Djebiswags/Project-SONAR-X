@@ -8,6 +8,7 @@ import json
 import sys
 import subprocess
 
+
 class SonarXApp(rumps.App):
     def __init__(self):
         # Initialize the app with the base title
@@ -46,9 +47,9 @@ class SonarXApp(rumps.App):
     def execute_silent_kill(self):
         # The Silent Assassin Logic
         killed_count = 0
-        for proc in psutil.process_iter(['name']):
+        for proc in psutil.process_iter(["name"]):
             try:
-                if proc.info['name'] in self.kill_list:
+                if proc.info["name"] in self.kill_list:
                     proc.terminate()
                     killed_count += 1
             except (psutil.NoSuchProcess, psutil.AccessDenied):
@@ -60,7 +61,7 @@ class SonarXApp(rumps.App):
         try:
             requests.get("https://www.google.com", timeout=2)
             return "🟢"
-        except:
+        except requests.RequestException:
             return "🔴"
 
     def heartbeat_loop(self):
@@ -68,12 +69,12 @@ class SonarXApp(rumps.App):
         while self.monitoring:
             cpu_load = psutil.cpu_percent(interval=2)
             net_icon = self.check_network_status()
-            
+
             if self.is_cooling:
                 self.title = f"❄️ COOLING: {cpu_load}% | {net_icon}"
                 if cpu_load < 60.0:
                     self.is_cooling = False
-                    
+
                     # Short variable to prevent terminal cut-off
                     stable_msg = "System stable. Resuming standard operations."
                     self.alert_desktop(stable_msg)
@@ -81,13 +82,13 @@ class SonarXApp(rumps.App):
                 if cpu_load > 85.0:
                     self.is_cooling = True
                     assassinations = self.execute_silent_kill()
-                    
+
                     # Short variable to prevent terminal cut-off
                     warn_msg = f"REDLINE! Terminated {assassinations} background hogs."
                     self.alert_desktop(warn_msg)
-                
+
                 self.title = f"🎧 CPU: {cpu_load}% | {net_icon}"
-            
+
             time.sleep(5)
 
     def alert_desktop(self, message):
@@ -95,8 +96,9 @@ class SonarXApp(rumps.App):
         part_one = f'display notification "{message}" '
         part_two = 'with title "Project SONAR-X" sound name "Glass"'
         full_script = part_one + part_two
-        
+
         os.system(f"osascript -e '{full_script}'")
+
 
 if __name__ == "__main__":
     SonarXApp().run()
