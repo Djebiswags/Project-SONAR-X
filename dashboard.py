@@ -1,10 +1,12 @@
-import psutil
 import sys
+
+import psutil
 
 
 def _import_customtkinter():
     try:
         import customtkinter as ctk
+
         return ctk
     except ModuleNotFoundError as exc:
         raise RuntimeError(
@@ -29,6 +31,9 @@ def create_dashboard():
             self.grid_rowconfigure(1, weight=1)
             self.grid_columnconfigure(0, weight=1)
 
+            # Store the scheduled update job ID to prevent memory leak / Tcl errors on destroy
+            self._update_job_id = None
+
             self.cpu_label = ctk.CTkLabel(
                 self,
                 text="CPU Load: --%",
@@ -37,19 +42,40 @@ def create_dashboard():
             )
             self.cpu_label.grid(row=0, column=0, pady=20)
 
-            self.ram_label = ctk.CTkLabel(self, text="RAM Usage: --%", font=("Helvetica", 18))
+            self.ram_label = ctk.CTkLabel(
+                self, text="RAM Usage: --%", font=("Helvetica", 18)
+            )
             self.ram_label.grid(row=1, column=0, pady=10)
 
             self.update_telemetry()
 
+            # Global keyboard shortcut to close HUD using the Escape key
+            self.bind_all("<Escape>", lambda event: self.destroy())
+
         def update_telemetry(self):
             cpu = psutil.cpu_percent()
             ram = psutil.virtual_memory().percent
-            cpu_color = "#FF3333" if cpu > 80 else "#00FFCC"
 
-            self.cpu_label.configure(text=f"CPU Load: {cpu}%", text_color=cpu_color)
-            self.ram_label.configure(text=f"RAM Usage: {ram}%")
-            self.after(1500, self.update_telemetry)
+            # Conforming to WCAG 1.4.1 (Use of Color): use multi-modal emojis to represent warning vs safe states
+            if cpu > 80:
+                cpu_color = "#FF3333"
+                cpu_status_emoji = "🚨"
+            else:
+                cpu_color = "#00FFCC"
+                cpu_status_emoji = "🟢"
+
+            self.cpu_label.configure(
+                text=f"CPU Load: {cpu_status_emoji} {cpu}%", text_color=cpu_color
+            )
+            self.ram_label.configure(text=f"RAM Usage: 🟢 {ram}%")
+            self._update_job_id = self.after(1500, self.update_telemetry)
+
+        def destroy(self):
+            # Clean up the scheduled job to prevent memory leaks and threading errors on teardown
+            if self._update_job_id is not None:
+                self.after_cancel(self._update_job_id)
+                self._update_job_id = None
+            super().destroy()
 
     return SonarHUD()
 
