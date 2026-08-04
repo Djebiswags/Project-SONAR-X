@@ -1,5 +1,6 @@
-import psutil
 import sys
+
+import psutil
 
 
 def _import_customtkinter():
@@ -40,16 +41,35 @@ def create_dashboard():
             self.ram_label = ctk.CTkLabel(self, text="RAM Usage: --%", font=("Helvetica", 18))
             self.ram_label.grid(row=1, column=0, pady=10)
 
+            # Global key binding to close the HUD with Escape key for keyboard accessibility
+            self.bind_all("<Escape>", lambda event: self.destroy())
+
+            self._update_job_id = None
             self.update_telemetry()
 
         def update_telemetry(self):
             cpu = psutil.cpu_percent()
             ram = psutil.virtual_memory().percent
-            cpu_color = "#FF3333" if cpu > 80 else "#00FFCC"
 
-            self.cpu_label.configure(text=f"CPU Load: {cpu}%", text_color=cpu_color)
+            # Multi-modal status indicators for WCAG 1.4.1 compliance:
+            # Combining color changes with distinct emojis (🟢 and 🚨) to assist colorblind users.
+            if cpu > 80:
+                cpu_color = "#FF3333"
+                emoji = "🚨"
+            else:
+                cpu_color = "#00FFCC"
+                emoji = "🟢"
+
+            self.cpu_label.configure(text=f"{emoji} CPU Load: {cpu}%", text_color=cpu_color)
             self.ram_label.configure(text=f"RAM Usage: {ram}%")
-            self.after(1500, self.update_telemetry)
+            self._update_job_id = self.after(1500, self.update_telemetry)
+
+        def destroy(self):
+            # Cancel scheduled recurring telemetry updates to prevent memory leaks and threading errors on teardown.
+            if self._update_job_id is not None:
+                self.after_cancel(self._update_job_id)
+                self._update_job_id = None
+            super().destroy()
 
     return SonarHUD()
 
