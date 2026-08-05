@@ -31,7 +31,7 @@ def create_dashboard():
 
             self.cpu_label = ctk.CTkLabel(
                 self,
-                text="CPU Load: --%",
+                text="🟢 CPU Load: --%",
                 font=("Helvetica", 24, "bold"),
                 text_color="#00FFCC",
             )
@@ -40,16 +40,35 @@ def create_dashboard():
             self.ram_label = ctk.CTkLabel(self, text="RAM Usage: --%", font=("Helvetica", 18))
             self.ram_label.grid(row=1, column=0, pady=10)
 
+            # Global bind of Escape key to close the window
+            self.bind_all("<Escape>", lambda event: self.destroy())
+
+            self._update_job_id = None
             self.update_telemetry()
 
         def update_telemetry(self):
             cpu = psutil.cpu_percent()
             ram = psutil.virtual_memory().percent
-            cpu_color = "#FF3333" if cpu > 80 else "#00FFCC"
 
-            self.cpu_label.configure(text=f"CPU Load: {cpu}%", text_color=cpu_color)
+            if cpu > 80:
+                cpu_color = "#FF3333"
+                emoji = "🚨"
+            else:
+                cpu_color = "#00FFCC"
+                emoji = "🟢"
+
+            self.cpu_label.configure(text=f"{emoji} CPU Load: {cpu}%", text_color=cpu_color)
             self.ram_label.configure(text=f"RAM Usage: {ram}%")
-            self.after(1500, self.update_telemetry)
+            self._update_job_id = self.after(1500, self.update_telemetry)
+
+        def destroy(self):
+            if self._update_job_id is not None:
+                try:
+                    self.after_cancel(self._update_job_id)
+                except Exception:
+                    pass
+                self._update_job_id = None
+            super().destroy()
 
     return SonarHUD()
 
