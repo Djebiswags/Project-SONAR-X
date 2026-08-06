@@ -1,0 +1,3 @@
+## 2025-02-15 - Multi-Modal HUD Indicators & Keyboard Close Shortcut
+**Learning:** Combining color status cues with distinct emojis (e.g. 🟢 vs 🚨) conforms to WCAG 1.4.1 and ensures colorblind accessibility. Binding the Escape key globally via `bind_all` improves keyboard accessibility of top-level utility windows/HUDs regardless of sub-widget focus. Store and cancel scheduled `.after` Tkinter loops in `destroy()` to prevent memory leaks and threading exceptions.
+**Action:** When designing Tkinter/CustomTkinter utility windows, always bind `Escape` globally with `bind_all("<Escape>")`, display multi-modal indicators for status, and cleanly override `destroy` to teardown periodic loop IDs.
