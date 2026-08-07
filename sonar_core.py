@@ -37,7 +37,9 @@ def check_ram_usage(threshold: float = DEFAULT_RAM_THRESHOLD) -> float:
     """Return RAM usage and alert if the value exceeds the threshold."""
     ram_usage = psutil.virtual_memory().percent
     if ram_usage > threshold:
-        alert_desktop(f"Warning: RAM usage at {ram_usage}%. Sentinel is monitoring processes.")
+        alert_desktop(
+            f"Warning: RAM usage at {ram_usage}%. Sentinel is monitoring processes."
+        )
     return ram_usage
 
 
@@ -77,20 +79,46 @@ def run_cycle(
 
     if cpu_load > cpu_threshold and kill_list:
         terminated = execute_silent_kill(kill_list)
-        alert_desktop(f"High CPU detected: {cpu_load}%. Terminated {terminated} background process(es).")
+        alert_desktop(
+            f"High CPU detected: {cpu_load}%. Terminated {terminated} background process(es)."
+        )
 
-    print(f"[Sentinel Pulse] CPU: {cpu_load}% | RAM: {ram_load}% | Network: {net_status}")
+    print(
+        f"[Sentinel Pulse] CPU: {cpu_load}% | RAM: {ram_load}% | Network: {net_status}"
+    )
     time.sleep(sleep_interval)
     return cpu_load, ram_load, net_status
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Project SONAR-X system sentinel")
-    parser.add_argument("--once", action="store_true", help="Run a single monitoring cycle and exit")
-    parser.add_argument("--cpu-threshold", type=float, default=DEFAULT_CPU_THRESHOLD, help="CPU threshold to trigger mitigation")
-    parser.add_argument("--ram-threshold", type=float, default=DEFAULT_RAM_THRESHOLD, help="RAM threshold to trigger alerts")
-    parser.add_argument("--cpu-interval", type=float, default=DEFAULT_CPU_INTERVAL, help="CPU sample interval in seconds")
-    parser.add_argument("--sleep-interval", type=float, default=DEFAULT_SLEEP_INTERVAL, help="Sleep time between cycles in seconds")
+    parser.add_argument(
+        "--once", action="store_true", help="Run a single monitoring cycle and exit"
+    )
+    parser.add_argument(
+        "--cpu-threshold",
+        type=float,
+        default=DEFAULT_CPU_THRESHOLD,
+        help="CPU threshold to trigger mitigation",
+    )
+    parser.add_argument(
+        "--ram-threshold",
+        type=float,
+        default=DEFAULT_RAM_THRESHOLD,
+        help="RAM threshold to trigger alerts",
+    )
+    parser.add_argument(
+        "--cpu-interval",
+        type=float,
+        default=DEFAULT_CPU_INTERVAL,
+        help="CPU sample interval in seconds",
+    )
+    parser.add_argument(
+        "--sleep-interval",
+        type=float,
+        default=DEFAULT_SLEEP_INTERVAL,
+        help="Sleep time between cycles in seconds",
+    )
     return parser.parse_args()
 
 
