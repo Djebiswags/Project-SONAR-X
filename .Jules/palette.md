@@ -1,0 +1,5 @@
+# Palette's Journal - Critical UX & Accessibility Learnings
+
+## 2025-02-15 - [Multi-modal Indicators & Keyboard Bindings in Tkinter Telemetry HUDs]
+**Learning:** Under WCAG 1.4.1 (Use of Color), relying solely on color-coded telemetry changes (like a green-to-red text shift for CPU/RAM status) is highly inaccessible for colorblind users. Furthermore, utility windows (HUDs) that reside "topmost" require immediate keyboard dismissal via the Escape key to ensure keyboard-only navigation compatibility. When binding global keys in CustomTkinter, standard widget-level `bind` can lose keypresses if another sub-widget holds focus; using `bind_all` is the only robust method. Lastly, background telemetry updates scheduled via `.after()` must be registered and cancelled via `after_cancel()` within an overridden `destroy()` method to prevent persistent memory leaks and threading errors on window disposal.
+**Action:** Always pair color transitions with distinct visual shapes or text elements (e.g., 🟢 and 🚨). Implement global keyboard listeners using `bind_all("<Escape>", ...)` and explicitly teardown scheduled `.after()` jobs on window teardown in CustomTkinter.
