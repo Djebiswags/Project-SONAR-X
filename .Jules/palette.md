@@ -1,0 +1,5 @@
+## 2025-02-18 - WCAG 1.4.1 Compliant Multi-Modal Live Telemetry
+
+**Learning:** When displaying dynamic real-time telemetry HUD dashboards, using color coding alone (such as green/red) to convey threshold alerts violates WCAG 1.4.1 (Use of Color) and isolates colorblind users. Combining color status alerts with distinct, highly recognizable multi-modal visual markers (such as 🟢 and 🚨 emojis) ensures accessibility. Additionally, binding global keyboard shortcuts using `self.bind_all` instead of instance-level `bind` captures keyboard events globally regardless of focus, and properly tearing down recurring `.after` jobs prevents memory leaks and Tcl errors during sudden window destructions.
+
+**Action:** Ensure all future desktop HUDs or widgets use color-agnostic visual status indicators (emojis, shapes, or text labels), bind Escape to global `bind_all("<Escape>")` to permit keyboard window dismissal, and always override `destroy()` to safely clean up any scheduled `.after()` callback jobs.
