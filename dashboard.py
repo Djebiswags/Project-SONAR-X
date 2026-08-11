@@ -40,16 +40,35 @@ def create_dashboard():
             self.ram_label = ctk.CTkLabel(self, text="RAM Usage: --%", font=("Helvetica", 18))
             self.ram_label.grid(row=1, column=0, pady=10)
 
+            # Bind Escape key globally to exit the dashboard
+            self.bind_all("<Escape>", lambda event: self.destroy())
+
+            self._after_id = None
             self.update_telemetry()
 
         def update_telemetry(self):
             cpu = psutil.cpu_percent()
             ram = psutil.virtual_memory().percent
+
+            # Multi-modal indicators for accessibility (WCAG 1.4.1 Use of Color)
+            cpu_emoji = "🚨" if cpu > 80 else "🟢"
+            ram_emoji = "🚨" if ram > 80 else "🟢"
+
             cpu_color = "#FF3333" if cpu > 80 else "#00FFCC"
 
-            self.cpu_label.configure(text=f"CPU Load: {cpu}%", text_color=cpu_color)
-            self.ram_label.configure(text=f"RAM Usage: {ram}%")
-            self.after(1500, self.update_telemetry)
+            self.cpu_label.configure(text=f"CPU Load: {cpu}% {cpu_emoji}", text_color=cpu_color)
+            self.ram_label.configure(text=f"RAM Usage: {ram}% {ram_emoji}")
+            self._after_id = self.after(1500, self.update_telemetry)
+
+        def destroy(self):
+            # Overridden destroy to cancel the scheduled .after() job to prevent memory leaks and threading errors
+            if self._after_id is not None:
+                try:
+                    self.after_cancel(self._after_id)
+                except Exception:
+                    pass
+                self._after_id = None
+            super().destroy()
 
     return SonarHUD()
 
