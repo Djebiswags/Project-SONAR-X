@@ -29,6 +29,10 @@ def create_dashboard():
             self.grid_rowconfigure(1, weight=1)
             self.grid_columnconfigure(0, weight=1)
 
+            self._update_job = None
+
+            self.bind_all("<Escape>", lambda event: self.destroy())
+
             self.cpu_label = ctk.CTkLabel(
                 self,
                 text="CPU Load: --%",
@@ -45,11 +49,21 @@ def create_dashboard():
         def update_telemetry(self):
             cpu = psutil.cpu_percent()
             ram = psutil.virtual_memory().percent
+            icon = "🚨" if cpu > 80 else "🟢"
             cpu_color = "#FF3333" if cpu > 80 else "#00FFCC"
 
-            self.cpu_label.configure(text=f"CPU Load: {cpu}%", text_color=cpu_color)
+            self.cpu_label.configure(text=f"CPU Load: {icon} {cpu}%", text_color=cpu_color)
             self.ram_label.configure(text=f"RAM Usage: {ram}%")
-            self.after(1500, self.update_telemetry)
+            self._update_job = self.after(1500, self.update_telemetry)
+
+        def destroy(self):
+            if self._update_job is not None:
+                try:
+                    self.after_cancel(self._update_job)
+                except Exception:
+                    pass
+                self._update_job = None
+            super().destroy()
 
     return SonarHUD()
 

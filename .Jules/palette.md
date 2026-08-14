@@ -1,0 +1,3 @@
+## 2026-07-22 - Multi-Modal Indicators and Keyboard Shortcuts in CustomTkinter HUDs
+**Learning:** WCAG 1.4.1 compliance in Python CustomTkinter HUDs requires pairing color changes (e.g., green vs. red) with visual text indicators (such as 🟢 and 🚨 emojis) so colorblind users can distinguish statuses. Furthermore, binding `<Escape>` globally via `bind_all` and cancelling scheduled `.after()` jobs on window `destroy()` prevents memory leaks and ensures keyboard accessibility.
+**Action:** Always combine status emojis with color changes on status labels and register global key bindings with proper `.after_cancel()` teardown in CustomTkinter popups.
