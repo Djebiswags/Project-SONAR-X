@@ -1,0 +1,3 @@
+## 2025-05-18 - Multi-Modal Status & Global Escape Binding in CustomTkinter HUD
+**Learning:** CustomTkinter telemetry labels that rely solely on color changes fail WCAG 1.4.1 (Use of Color) for colorblind users. Adding multi-modal status icons (🟢 / 🚨) alongside color coding ensures accessible status perception. Global keyboard shortcuts like `<Escape>` to close utility HUDs must use `bind_all` rather than `bind` to ensure focus-independent event handling.
+**Action:** Always combine status colors with visual status icons and use `bind_all("<Escape>", ...)` with `after_cancel()` teardown on CustomTkinter utility windows.
