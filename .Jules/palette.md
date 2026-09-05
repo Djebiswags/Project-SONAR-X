@@ -1,0 +1,3 @@
+## 2025-09-05 - Multi-modal indicators & global escape binding in CustomTkinter HUDs
+**Learning:** In CustomTkinter utility HUD windows, color changes alone for telemetry thresholds fail WCAG 1.4.1 (Use of Color). Combining emoji status indicators (🟢 / 🚨) provides clear multi-modal perception. Furthermore, global keyboard shortcuts (like Escape to close utility windows) must use `bind_all` to ensure focus on any child widget still captures the dismissal hotkey.
+**Action:** For all CustomTkinter windows, pair status color coding with visual status icons and bind `<Escape>` via `bind_all` while handling `after_cancel` teardown on destroy.
