@@ -22,8 +22,10 @@ def create_dashboard():
         def __init__(self):
             super().__init__()
             self.title("SONAR-X | Live Telemetry")
-            self.geometry("350x200")
+            self.geometry("380x200")
             self.attributes("-topmost", True)
+
+            self._update_job = None
 
             self.grid_rowconfigure(0, weight=1)
             self.grid_rowconfigure(1, weight=1)
@@ -31,8 +33,8 @@ def create_dashboard():
 
             self.cpu_label = ctk.CTkLabel(
                 self,
-                text="CPU Load: --%",
-                font=("Helvetica", 24, "bold"),
+                text="🟢 CPU Load: --%",
+                font=("Helvetica", 22, "bold"),
                 text_color="#00FFCC",
             )
             self.cpu_label.grid(row=0, column=0, pady=20)
@@ -40,16 +42,33 @@ def create_dashboard():
             self.ram_label = ctk.CTkLabel(self, text="RAM Usage: --%", font=("Helvetica", 18))
             self.ram_label.grid(row=1, column=0, pady=10)
 
+            self.bind_all("<Escape>", lambda event: self.destroy())
+
             self.update_telemetry()
 
         def update_telemetry(self):
             cpu = psutil.cpu_percent()
             ram = psutil.virtual_memory().percent
-            cpu_color = "#FF3333" if cpu > 80 else "#00FFCC"
 
-            self.cpu_label.configure(text=f"CPU Load: {cpu}%", text_color=cpu_color)
+            if cpu > 80:
+                cpu_text = f"🚨 CPU Load: {cpu}%"
+                cpu_color = "#FF3333"
+            else:
+                cpu_text = f"🟢 CPU Load: {cpu}%"
+                cpu_color = "#00FFCC"
+
+            self.cpu_label.configure(text=cpu_text, text_color=cpu_color)
             self.ram_label.configure(text=f"RAM Usage: {ram}%")
-            self.after(1500, self.update_telemetry)
+            self._update_job = self.after(1500, self.update_telemetry)
+
+        def destroy(self):
+            if self._update_job is not None:
+                try:
+                    self.after_cancel(self._update_job)
+                except Exception:
+                    pass
+                self._update_job = None
+            super().destroy()
 
     return SonarHUD()
 
