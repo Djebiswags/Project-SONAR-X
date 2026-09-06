@@ -1,0 +1,3 @@
+## 2026-03-29 - Multi-modal visual status indicators & Escape key accessibility in CustomTkinter HUD
+**Learning:** Color-only indicators (e.g. changing text color to red on high CPU) fail WCAG 1.4.1 (Use of Color). Combining distinct visual icons (🟢 vs 🚨) with text color changes provides immediate multi-modal accessibility for colorblind users. Additionally, global utility windows in Tkinter/CustomTkinter should use `bind_all("<Escape>", ...)` and cancel pending `.after()` job IDs in `destroy()` to prevent memory leaks and Tcl background errors on window teardown.
+**Action:** Always combine color changes with status icons/emojis in desktop HUD labels, and store `.after()` job handles to cancel them inside overridden `destroy()` methods.
