@@ -1,0 +1,3 @@
+## 2026-03-30 - Multi-Modal HUD Indicators and Escape Dismissal in CustomTkinter
+**Learning:** WCAG 1.4.1 (Use of Color) requires non-color visual cues (like 🟢 and 🚨 emojis) for state changes. In Tkinter/CustomTkinter HUDs, binding global shortcuts with `bind_all("<Escape>", ...)` ensures reliable keyboard accessibility, while storing and cancelling `.after()` scheduled update jobs in `destroy()` prevents memory leaks and background callback errors.
+**Action:** Always combine color changes with distinct status emojis/icons and cancel scheduled `.after()` callbacks in Tkinter component `destroy()` handlers.
