@@ -5,6 +5,7 @@ import sys
 def _import_customtkinter():
     try:
         import customtkinter as ctk
+
         return ctk
     except ModuleNotFoundError as exc:
         raise RuntimeError(
@@ -24,6 +25,9 @@ def create_dashboard():
             self.title("SONAR-X | Live Telemetry")
             self.geometry("350x200")
             self.attributes("-topmost", True)
+            self._after_id = None
+
+            self.bind_all("<Escape>", lambda event: self.destroy())
 
             self.grid_rowconfigure(0, weight=1)
             self.grid_rowconfigure(1, weight=1)
@@ -46,10 +50,17 @@ def create_dashboard():
             cpu = psutil.cpu_percent()
             ram = psutil.virtual_memory().percent
             cpu_color = "#FF3333" if cpu > 80 else "#00FFCC"
+            cpu_icon = "🚨" if cpu > 80 else "🟢"
 
-            self.cpu_label.configure(text=f"CPU Load: {cpu}%", text_color=cpu_color)
+            self.cpu_label.configure(text=f"CPU Load: {cpu_icon} {cpu}%", text_color=cpu_color)
             self.ram_label.configure(text=f"RAM Usage: {ram}%")
-            self.after(1500, self.update_telemetry)
+            self._after_id = self.after(1500, self.update_telemetry)
+
+        def destroy(self):
+            if self._after_id is not None:
+                self.after_cancel(self._after_id)
+                self._after_id = None
+            super().destroy()
 
     return SonarHUD()
 
