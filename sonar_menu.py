@@ -60,7 +60,7 @@ class SonarXApp(rumps.App):
         try:
             requests.get("https://www.google.com", timeout=2)
             return "🟢"
-        except:
+        except Exception:
             return "🔴"
 
     def heartbeat_loop(self):

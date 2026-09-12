@@ -1,0 +1,3 @@
+## 2026-07-22 - Multi-modal indicators and global shortcut bindings in Tkinter telemetry HUDs
+**Learning:** Color-only status changes in telemetry UI (e.g. green/red load text) fail WCAG 1.4.1 (Use of Color) for colorblind users. Combining colors with distinct visual symbols (e.g. 🟢 vs 🚨) ensures full visual accessibility. Additionally, window escape key shortcuts should be bound globally via `bind_all("<Escape>", ...)` rather than widget-level `bind` so that key events trigger regardless of sub-widget focus.
+**Action:** Always include non-color status indicators for high/low telemetry values and use `bind_all` for global utility window dismiss actions.
