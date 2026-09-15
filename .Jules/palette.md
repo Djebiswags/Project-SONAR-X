@@ -1,0 +1,3 @@
+## 2025-03-09 - Accessible Telemetry Status and Keyboard Dismissal in Desktop HUDs
+**Learning:** Depending solely on color changes (e.g., green to red) for status changes violates WCAG 1.4.1 (Use of Color) and excludes colorblind users. Combining distinct visual symbols/emojis (🟢 vs 🚨) alongside color coding ensures inclusive telemetry presentation. Additionally, binding global keyboard shortcuts (`<Escape>`) with `bind_all` improves keyboard accessibility for top-level utility HUDs.
+**Action:** Pair color status coding with accessible icons or textual indicators, bind Escape to dismiss utility windows, and safely cancel Tkinter `.after()` recurring jobs on `destroy()`.
