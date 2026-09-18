@@ -1,0 +1,3 @@
+## 2025-02-18 - WCAG 1.4.1 Telemetry Indicators & Keyboard Dismissal
+**Learning:** In desktop utility HUDs built with CustomTkinter, relying solely on text color for high/normal state changes violates WCAG 1.4.1 (Use of Color). Combining visual status emojis (🟢/🚨) with keyboard shortcuts (Escape key via `bind_all`) provides multi-modal cues and seamless keyboard dismissability. Additionally, canceling recurring `.after()` job handles on `destroy()` prevents silent Tcl memory leaks during rapid window closures.
+**Action:** Always combine color state changes with multi-modal status icons and bind `<Escape>` globally using `bind_all` on utility/overlay HUD windows.
