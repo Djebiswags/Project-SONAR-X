@@ -24,6 +24,9 @@ def create_dashboard():
             self.title("SONAR-X | Live Telemetry")
             self.geometry("350x200")
             self.attributes("-topmost", True)
+            self._timer_id = None
+
+            self.bind_all("<Escape>", lambda event: self.destroy())
 
             self.grid_rowconfigure(0, weight=1)
             self.grid_rowconfigure(1, weight=1)
@@ -45,11 +48,19 @@ def create_dashboard():
         def update_telemetry(self):
             cpu = psutil.cpu_percent()
             ram = psutil.virtual_memory().percent
+            cpu_icon = "🚨" if cpu > 80 else "🟢"
+            ram_icon = "🚨" if ram > 80 else "🟢"
             cpu_color = "#FF3333" if cpu > 80 else "#00FFCC"
 
-            self.cpu_label.configure(text=f"CPU Load: {cpu}%", text_color=cpu_color)
-            self.ram_label.configure(text=f"RAM Usage: {ram}%")
-            self.after(1500, self.update_telemetry)
+            self.cpu_label.configure(text=f"CPU Load: {cpu}% {cpu_icon}", text_color=cpu_color)
+            self.ram_label.configure(text=f"RAM Usage: {ram}% {ram_icon}")
+            self._timer_id = self.after(1500, self.update_telemetry)
+
+        def destroy(self):
+            if self._timer_id is not None:
+                self.after_cancel(self._timer_id)
+                self._timer_id = None
+            super().destroy()
 
     return SonarHUD()
 
