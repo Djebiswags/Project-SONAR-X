@@ -1,0 +1,3 @@
+## 2026-09-19 - Multi-modal indicators & Escape key dismiss in CustomTkinter HUDs
+**Learning:** WCAG 1.4.1 compliance in Tkinter/CustomTkinter telemetry widgets is achieved by pairing color state changes with distinct visual icons (🟢 / 🚨). Binding `<Escape>` via `bind_all` ensures window dismissal works regardless of sub-widget focus, and cancelling `.after()` scheduled timers in `destroy()` prevents memory leaks or Tcl errors when closing top-level windows.
+**Action:** Always store `.after()` job IDs to cancel in `destroy()`, use `bind_all("<Escape>")` for global utility dismissals, and supplement color status changes with textual or emoji indicators.
