@@ -1,0 +1,3 @@
+## 2026-03-31 - Multi-modal indicators and keyboard shortcuts for Tkinter/CustomTkinter HUDs
+**Learning:** In Tkinter/CustomTkinter utility windows, always supplement color-based status alerts with visual icons (e.g. 🟢 / 🚨) for colorblind accessibility (WCAG 1.4.1), and bind `<Escape>` via `bind_all` for fast keyboard teardown. Additionally, store scheduled `.after()` jobs to cancel them in `destroy()` to prevent Tcl error callbacks upon window closure.
+**Action:** Always include multi-modal icons, `bind_all("<Escape>", ...)` and `.after_cancel()` when creating desktop telemetry or utility HUDs.
