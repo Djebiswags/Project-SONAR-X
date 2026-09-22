@@ -1,0 +1,3 @@
+## 2026-03-30 - Multi-Modal Status Indicators & Escape Dismissal for Telemetry HUDs
+**Learning:** Color changes alone (e.g., #FF3333 vs #00FFCC) fail WCAG 1.4.1 (Use of Color) for colorblind users in telemetry HUDs. Adding distinct visual indicators (🟢 normal, 🚨 high load) alongside color cues ensures accessible status feedback. Furthermore, binding `<Escape>` using `bind_all` and cancelling background `.after()` callbacks in window `destroy()` prevents Tcl errors and ensures clean keyboard dismissal.
+**Action:** Always combine color changes with visual indicator symbols and bind Escape with `bind_all` for utility windows while clearing recurring timer tasks on teardown.
