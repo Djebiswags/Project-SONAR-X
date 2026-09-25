@@ -1,0 +1,3 @@
+## 2025-05-10 - Multi-Modal HUD Telemetry and Keyboard Accessibility
+**Learning:** Highlighting critical system thresholds (such as CPU overload) relying solely on color (red vs cyan) violates WCAG 1.4.1 (Use of Color) and reduces clarity for colorblind users. Furthermore, utility overlay HUDs without global `<Escape>` keyboard bindings hinder power users and keyboard-only navigation.
+**Action:** Always combine status colors with clear visual status indicators/emojis (e.g. 🟢 vs 🚨) and bind `<Escape>` via `bind_all` on top-level windows, ensuring proper timer/handler cancellation in `destroy()`.
