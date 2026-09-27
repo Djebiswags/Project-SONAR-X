@@ -1,0 +1,3 @@
+## 2026-03-30 - Multi-modal HUD Status and Keyboard Dismissal
+**Learning:** For telemetry HUDs, relying solely on text color change (e.g. green vs red) fails WCAG 1.4.1 for colorblind users. Combining color shifts with multi-modal visual status indicators (🟢 and 🚨) improves readability. Additionally, binding global Escape keys with unbind/after_cancel cleanup in `destroy()` enables keyboard dismissal without Tcl callback leaks.
+**Action:** Always combine color changes with distinct status icons and ensure Tkinter `destroy()` cleanly unbinds global event listeners and cancels active `.after()` timers.
