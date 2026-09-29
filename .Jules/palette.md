@@ -1,0 +1,3 @@
+## 2026-09-29 - Multi-modal indicators and keyboard teardown in CustomTkinter HUDs
+**Learning:** In telemetry HUDs and utility windows, relying solely on text color changes for alert states fails WCAG 1.4.1 (Use of Color). Combining status emojis (🟢 vs 🚨) with text color shifts provides clear visual cues for colorblind users. Additionally, binding global keyboard shortcuts (`<Escape>`) requires explicit `unbind_all` and `after_cancel` job cleanup during `destroy()` to prevent memory leaks and Tcl callback errors.
+**Action:** Always include multi-modal icons alongside status colors in HUD widgets, and override `destroy()` to clean up scheduled `.after()` timer jobs and global `bind_all` event listeners.
