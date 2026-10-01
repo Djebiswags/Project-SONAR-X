@@ -1,0 +1,3 @@
+## 2026-03-31 - Multi-modal Telemetry Status & Escape Key Teardown for CustomTkinter HUD
+**Learning:** CustomTkinter telemetry displays relying solely on text color violate WCAG 1.4.1. Combining color cues with status symbols (🟢/🚨) provides multi-modal accessible telemetry. Unbinding global shortcuts (`unbind_all`) and cancelling pending scheduled jobs (`after_cancel`) during `destroy()` prevents dangling Tcl callback errors.
+**Action:** Always include redundant icon/emoji indicators for color-coded system metrics, bind Escape key for HUD overlays, and cancel scheduled `.after()` jobs on window teardown.
