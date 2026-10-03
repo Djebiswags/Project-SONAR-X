@@ -1,0 +1,3 @@
+## 2025-05-18 - WCAG 1.4.1 Multi-modal Telemetry Indicators & Escape Key Dismissal in CustomTkinter
+**Learning:** Color-only status changes in utility HUDs (such as green/red CPU labels) violate WCAG 1.4.1 (Use of Color) and hinder colorblind users. Adding multi-modal visual indicators (such as status icons 🟢 / 🚨) alongside color changes makes status immediate and accessible. Furthermore, binding `<Escape>` using `bind_all` and gracefully cancelling `.after()` timer callbacks in `destroy()` ensures keyboard accessibility without Tcl callback memory leaks.
+**Action:** Always combine color coding with explicit status icons/text and ensure global shortcut bindings are properly unbound on teardown.
