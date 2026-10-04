@@ -1,0 +1,3 @@
+## 2026-03-30 - Multi-Modal HUD Indicators & Window Dismissal
+**Learning:** Color-only status indicators (red vs teal) fail WCAG 1.4.1 for colorblind users and floating desktop HUDs lack obvious keyboard dismiss capability. Combining visual status emojis (🟢 / 🚨) with global `<Escape>` key binding (`bind_all`) and canceling scheduled `.after()` updates in `destroy()` provides an accessible and leak-free micro-UX pattern for desktop telemetry tools.
+**Action:** Always complement color state changes with multi-modal visual indicators and bind `<Escape>` globally with proper `after_cancel()` teardown when creating transient utility windows.
