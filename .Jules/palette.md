@@ -1,0 +1,3 @@
+## 2025-05-18 - Multi-modal indicators & Escape key handling in Tkinter HUDs
+**Learning:** Color-only status warnings in CustomTkinter HUDs fail accessibility standards (WCAG 1.4.1). Adding status icons (🟢/🚨) alongside text color changes ensures clarity for colorblind users. Moreover, binding `<Escape>` via `bind_all` allows fast keyboard dismissal, but `after_cancel` and `unbind_all` must be called during `destroy()` to avoid lingering Tcl callbacks.
+**Action:** Always complement text color changes with visual status icons and handle window teardown explicitly when binding global hotkeys or recursive `.after()` timers in Tkinter.
