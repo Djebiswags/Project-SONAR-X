@@ -118,3 +118,12 @@ def test_parse_args_defaults():
         assert args.once is False
         assert args.cpu_threshold == sonar_core.DEFAULT_CPU_THRESHOLD
         assert args.ram_threshold == sonar_core.DEFAULT_RAM_THRESHOLD
+
+
+# ------------------------------------------------------- alert_desktop wiring
+
+
+def test_alert_desktop_delegates_to_platform_notify():
+    with patch("sonar_platform.notify") as notify:
+        sonar_core.alert_desktop("hello")
+    notify.assert_called_once_with(sonar_core.APP_NAME, "hello")
