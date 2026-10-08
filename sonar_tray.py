@@ -36,19 +36,39 @@ COOLING_RECOVER_BELOW = 60.0
 
 
 def build_icon_image(size: int = 64, cooling: bool = False) -> Image.Image:
-    """Render the tray icon (sonar rings + blip). Teal = normal, blue = cooling."""
-    img = Image.new("RGBA", (size, size), (16, 20, 28, 255))
+    """Radar-sweep tray icon: dark rounded tile, rings, sweep wedge, blip.
+
+    Teal = normal, blue = cooling.
+    """
+    img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
+    draw.rounded_rectangle(
+        [2, 2, size - 3, size - 3], radius=14, fill=(13, 17, 23, 255)
+    )
     cx = cy = size // 2
-    ring = (45, 212, 191, 255) if not cooling else (147, 197, 253, 255)
-    for radius in (size // 2 - 4, size // 3, size // 6):
+    ring = (96, 165, 250, 255) if cooling else (45, 212, 191, 255)
+    for radius in (size * 3 // 8, size // 4, size // 8):
         draw.ellipse(
             [cx - radius, cy - radius, cx + radius, cy + radius],
             outline=ring,
             width=2,
         )
-    dot = (52, 211, 153, 255) if not cooling else (96, 165, 250, 255)
-    draw.ellipse([cx - 5, cy - 5, cx + 5, cy + 5], fill=dot)
+    # sweep wedge on its own layer so it can be translucent
+    layer = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    wedge = ImageDraw.Draw(layer)
+    sweep = (200, 225, 255, 110) if cooling else (190, 255, 240, 110)
+    outer = size * 3 // 8
+    wedge.pieslice(
+        [cx - outer, cy - outer, cx + outer, cy + outer],
+        start=-70,
+        end=-15,
+        fill=sweep,
+    )
+    img = Image.alpha_composite(img, layer)
+    draw = ImageDraw.Draw(img)
+    dot = (147, 197, 253, 255) if cooling else (52, 211, 153, 255)
+    bx, by = size // 8, -(size // 4 - 2)
+    draw.ellipse([cx + bx - 3, cy + by - 3, cx + bx + 3, cy + by + 3], fill=dot)
     return img
 
 
