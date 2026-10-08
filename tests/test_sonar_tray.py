@@ -144,3 +144,58 @@ def test_quit_stops_icon(tray):
     tray.quit()
     assert tray.monitoring is False
     assert tray.icon.stopped is True
+
+
+# ------------------------------------------------------- HUD launch guard
+
+
+def _tray_with_dashboard(monkeypatch, tmp_path):
+    monkeypatch.setattr(sonar_tray, "__file__", str(tmp_path / "sonar_tray.py"))
+    (tmp_path / "dashboard.py").write_text("# stub dashboard")
+    return sonar_tray.SonarXTray()
+
+
+def test_hud_readiness_ok_when_gui_stack_present(monkeypatch, tmp_path):
+    monkeypatch.setitem(sys.modules, "tkinter", types.ModuleType("tkinter"))
+    monkeypatch.setitem(sys.modules, "customtkinter", types.ModuleType("customtkinter"))
+    tray = _tray_with_dashboard(monkeypatch, tmp_path)
+    assert tray.hud_readiness() is None
+
+
+def test_hud_readiness_reports_missing_dashboard(monkeypatch, tmp_path):
+    monkeypatch.setattr(sonar_tray, "__file__", str(tmp_path / "sonar_tray.py"))
+    tray = sonar_tray.SonarXTray()
+    assert "dashboard.py not found" in tray.hud_readiness()
+
+
+def test_hud_readiness_reports_missing_tkinter(monkeypatch, tmp_path):
+    monkeypatch.setitem(sys.modules, "tkinter", None)  # -> ImportError on import
+    tray = _tray_with_dashboard(monkeypatch, tmp_path)
+    assert "python3-tk" in tray.hud_readiness()
+
+
+def test_hud_readiness_reports_missing_customtkinter(monkeypatch, tmp_path):
+    monkeypatch.setitem(sys.modules, "tkinter", types.ModuleType("tkinter"))
+    monkeypatch.setitem(sys.modules, "customtkinter", None)
+    tray = _tray_with_dashboard(monkeypatch, tmp_path)
+    assert "customtkinter" in tray.hud_readiness()
+
+
+def test_open_dashboard_notifies_and_skips_popen_when_not_ready(tray):
+    with patch.object(tray, "hud_readiness", return_value="nope"), patch.object(
+        sonar_tray, "notify"
+    ) as notify, patch.object(sonar_tray.subprocess, "Popen") as popen:
+        tray.open_dashboard()
+    notify.assert_called_once()
+    assert "nope" in notify.call_args[0][1]
+    popen.assert_not_called()
+
+
+def test_open_dashboard_launches_when_ready(tray):
+    with patch.object(tray, "hud_readiness", return_value=None), patch.object(
+        sonar_tray.subprocess, "Popen"
+    ) as popen:
+        tray.open_dashboard()
+    popen.assert_called_once()
+    argv = popen.call_args[0][0]
+    assert argv[0] == sys.executable and argv[1].endswith("dashboard.py")
