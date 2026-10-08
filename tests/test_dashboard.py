@@ -1,4 +1,8 @@
 from unittest.mock import patch
+import pytest
+
+pytest.importorskip("tkinter")
+pytest.importorskip("customtkinter")
 
 from dashboard import create_dashboard
 
