@@ -46,7 +46,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install test deps
-        run: pip install pytest psutil requests
+        run: pip install pytest psutil requests pillow
       - name: Run pytest
         run: python -m pytest tests/ -v
 
@@ -86,7 +86,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install deps
-        run: pip install pytest psutil requests
+        run: pip install pytest psutil requests pillow
       - name: Compile portable modules
         run: python -m py_compile sonar_core.py sonar_platform.py sonar_tray.py
       - name: Run pytest
