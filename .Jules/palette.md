@@ -1,0 +1,3 @@
+## 2025-05-18 - WCAG 1.4.1 Multi-Modal Telemetry Indicators in CustomTkinter HUD
+**Learning:** Highlighting critical HUD states (such as high CPU load) using color alone violates WCAG 1.4.1 and prevents colorblind users from identifying status changes. Combining color changes (`#00FFCC` vs `#FF3333`) with visual status indicators (`🟢` / `🚨`) and adding global `<Escape>` keyboard shortcuts makes desktop utility windows significantly more accessible and intuitive.
+**Action:** When designing or updating telemetry labels and status HUDs, always include multi-modal visual indicators alongside color shifts and register global Escape hotkeys for effortless window dismissal.
