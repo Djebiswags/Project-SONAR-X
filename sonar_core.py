@@ -13,13 +13,26 @@ DEFAULT_CPU_THRESHOLD = 85.0
 DEFAULT_RAM_THRESHOLD = 80.0
 DEFAULT_CPU_INTERVAL = 2.0
 DEFAULT_SLEEP_INTERVAL = 5.0
+APP_NAME = "Project SONAR-X"
 
 
 def alert_desktop(message: str) -> None:
-    """Send a macOS notification to the user."""
-    safe_message = message.replace('"', '\\"')
-    apple_script = f'display notification "{safe_message}" with title "Project SONAR-X" sound name "Glass"'
-    os.system(f"osascript -e '{apple_script}'")
+    """Desktop notification via the cross-platform layer.
+
+    Falls back to the legacy macOS osascript path when sonar_platform
+    is unavailable (e.g. running from an older checkout).
+    """
+    try:
+        from sonar_platform import notify
+
+        notify(APP_NAME, message)
+    except Exception:
+        safe_message = message.replace('"', '\\"')
+        apple_script = (
+            f'display notification "{safe_message}" '
+            f'with title "{APP_NAME}" sound name "Glass"'
+        )
+        os.system(f"osascript -e '{apple_script}'")
 
 
 def load_config(path: Path = CONFIG_FILE) -> list[str]:
