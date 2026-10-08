@@ -60,6 +60,10 @@ pip install -r requirements.txt
   ```bash
   python3 sonar_menu.py
   ```
+- On Linux, run the system-tray twin instead (needs `pip install pystray pillow`):
+  ```bash
+  python3 sonar_tray.py
+  ```
 - Run one monitoring cycle for validation:
   ```bash
   python3 sonar_core.py --once
