@@ -1,0 +1,3 @@
+## 2026-10-07 - Multi-Modal Telemetry & Global Shortcut Dismissal in CustomTkinter HUDs
+**Learning:** Color coding alone (e.g. green vs. red text) fails WCAG 1.4.1 (Use of Color) for colorblind users; pairing status text with distinct emoji indicators (🟢 / 🚨) provides immediate multi-modal accessibility. Additionally, binding global escape listeners (`bind_all("<Escape>")`) in CustomTkinter HUDs requires explicit cleanup in `destroy()` via `unbind_all` and `after_cancel` to prevent dangling Tcl error callbacks.
+**Action:** Always include multi-modal icons alongside status colors in desktop telemetry labels, and ensure global keyboard listeners cancel scheduled jobs and unbind listeners on window teardown.
