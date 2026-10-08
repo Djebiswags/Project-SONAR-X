@@ -61,6 +61,37 @@ jobs:
       - name: Install full requirements (rumps/customtkinter are macOS-only)
         run: pip install -r requirements.txt
 
+  tray-smoke:
+    name: Tray boots on Linux (virtual display)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install tray deps + Xvfb
+        run: |
+          pip install pystray pillow psutil requests
+          sudo apt-get update -y -qq
+          sudo apt-get install -y -qq xvfb
+      - name: Boot the real tray under a virtual display
+        run: timeout 90 xvfb-run -a python3 scripts/tray_smoke.py
+
+  windows-check:
+    name: Compile + unit tests (Windows)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: pip install pytest psutil requests
+      - name: Compile portable modules
+        run: python -m py_compile sonar_core.py sonar_platform.py sonar_tray.py
+      - name: Run pytest
+        run: python -m pytest tests/ -v
+
   shellcheck:
     name: ShellCheck scripts
     runs-on: ubuntu-latest
