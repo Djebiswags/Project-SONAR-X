@@ -1,6 +1,6 @@
 # Project SONAR-X
 
-[![License](https://img.shields.io/github/license/Djebiswags/Project-SONAR-X.svg)](LICENSE) [![GitHub stars](https://img.shields.io/github/stars/Djebiswags/Project-SONAR-X?style=social)](https://github.com/Djebiswags/Project-SONAR-X/stargazers) [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org)
+[![License](https://img.shields.io/github/license/Djebiswags/Project-SONAR-X.svg)](LICENSE) [![GitHub stars](https://img.shields.io/github/stars/Djebiswags/Project-SONAR-X?style=social)](https://github.com/Djebiswags/Project-SONAR-X/stargazers) [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org) [![SONAR-X CI](https://github.com/Djebiswags/Project-SONAR-X/actions/workflows/ci.yml/badge.svg)](https://github.com/Djebiswags/Project-SONAR-X/actions)
 
 A lightweight macOS/Unix system sentinel for real-time telemetry, adaptive CPU cooling, and configurable process mitigation.
 
