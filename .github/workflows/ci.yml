@@ -37,6 +37,19 @@ jobs:
       - name: Single monitoring cycle
         run: python sonar_core.py --once --cpu-interval 0.1 --sleep-interval 0
 
+  unit-tests:
+    name: Unit tests (pytest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test deps
+        run: pip install pytest psutil requests
+      - name: Run pytest
+        run: python -m pytest tests/ -v
+
   deps-macos:
     name: Dependency install check (macOS)
     runs-on: macos-latest
