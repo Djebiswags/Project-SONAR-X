@@ -16,7 +16,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Compile check
-        run: python -m py_compile sonar_core.py sonar_menu.py dashboard.py
+        run: python -m py_compile sonar_core.py sonar_menu.py sonar_platform.py sonar_tray.py dashboard.py
 
   smoke-core:
     name: Smoke test sonar_core.py --once
