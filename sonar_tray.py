@@ -120,9 +120,30 @@ class SonarXTray:
             self.refresh()
             notify(APP_NAME, "Agent Offline — standing down.")
 
+    def hud_readiness(self) -> str | None:
+        """None if the HUD can launch, else a human-readable reason it can't."""
+        if not Path(__file__).with_name("dashboard.py").exists():
+            return "dashboard.py not found next to the tray app"
+        try:
+            import tkinter  # noqa: F401
+        except ImportError:
+            return "python3-tk is not installed (sudo apt install python3-tk)"
+        try:
+            import customtkinter  # noqa: F401
+        except ImportError:
+            return "customtkinter is not installed (pip install customtkinter)"
+        return None
+
     def open_dashboard(self, _icon=None, _item=None) -> None:
+        problem = self.hud_readiness()
+        if problem:
+            notify(APP_NAME, f"HUD unavailable — {problem}.")
+            return
         dashboard = Path(__file__).with_name("dashboard.py")
-        subprocess.Popen([sys.executable, str(dashboard)])
+        try:
+            subprocess.Popen([sys.executable, str(dashboard)])
+        except Exception as exc:
+            notify(APP_NAME, f"HUD failed to launch: {exc}")
 
     def quit(self, icon=None, _item=None) -> None:
         self.monitoring = False
