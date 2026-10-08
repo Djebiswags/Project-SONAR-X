@@ -1,0 +1,60 @@
+name: SONAR-X CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  lint:
+    name: Lint (py_compile)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile check
+        run: python -m py_compile sonar_core.py sonar_menu.py dashboard.py
+
+  smoke-core:
+    name: Smoke test sonar_core.py --once
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install core deps only (no GUI/macOS packages)
+        run: pip install psutil requests
+      - name: Empty kill list so CI never touches processes
+        run: |
+          printf '{"kill_list": []}\n' > config.json
+      - name: Single monitoring cycle
+        run: python sonar_core.py --once --cpu-interval 0.1 --sleep-interval 0
+
+  deps-macos:
+    name: Dependency install check (macOS)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install full requirements (rumps/customtkinter are macOS-only)
+        run: pip install -r requirements.txt
+
+  shellcheck:
+    name: ShellCheck scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run ShellCheck
+        run: |
+          sudo apt-get update -y -qq
+          sudo apt-get install -y -qq shellcheck
+          shellcheck launch_sonar.sh scripts/*.sh
