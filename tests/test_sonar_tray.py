@@ -53,7 +53,9 @@ fake_pystray.Menu = _Menu
 fake_pystray.Icon = _Icon
 sys.modules["pystray"] = fake_pystray
 
-import sonar_tray  # noqa: E402
+pytest.importorskip("PIL")
+
+import sonar_tray
 
 
 @pytest.fixture()
