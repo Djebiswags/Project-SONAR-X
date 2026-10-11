@@ -1,0 +1,3 @@
+## 2025-05-18 - WCAG 1.4.1 Multi-Modal Telemetry Indicators & Escape HUD Teardown
+**Learning:** Telemetry status indicators relying solely on color changes (e.g. red vs green text) violate WCAG 1.4.1 (Use of Color). Combining distinct visual emojis (🟢/🚨) with text color changes enables colorblind users to immediately perceive high system load. Additionally, binding `<Escape>` to utility windows and unbinding shortcuts / canceling timer IDs on window teardown prevents lingering event handlers and Tcl timer leaks.
+**Action:** Always combine distinct visual icons/emojis with color state changes on telemetry UI components and properly clean up key bindings and timer IDs inside `destroy()` for Tkinter/CustomTkinter windows.
