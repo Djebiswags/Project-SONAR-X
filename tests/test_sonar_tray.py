@@ -10,6 +10,8 @@ from unittest.mock import patch
 
 import pytest
 
+pytest.importorskip("PIL")
+
 # ---------------------------------------------------------------- pystray stub
 fake_pystray = types.ModuleType("pystray")
 
@@ -53,7 +55,7 @@ fake_pystray.Menu = _Menu
 fake_pystray.Icon = _Icon
 sys.modules["pystray"] = fake_pystray
 
-import sonar_tray  # noqa: E402
+import sonar_tray
 
 
 @pytest.fixture()
