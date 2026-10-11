@@ -53,7 +53,6 @@ fake_pystray.Menu = _Menu
 fake_pystray.Icon = _Icon
 sys.modules["pystray"] = fake_pystray
 
-pytest.importorskip("PIL")
 
 import sonar_tray
 
