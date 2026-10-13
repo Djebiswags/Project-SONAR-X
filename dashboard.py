@@ -25,12 +25,13 @@ def create_dashboard():
         def __init__(self):
             super().__init__()
             self.title("SONAR-X | Live Telemetry")
-            self.geometry("350x200")
+            self.geometry("350x220")
             self.attributes("-topmost", True)
             self._after_id = None
 
             self.grid_rowconfigure(0, weight=1)
             self.grid_rowconfigure(1, weight=1)
+            self.grid_rowconfigure(2, weight=1)
             self.grid_columnconfigure(0, weight=1)
 
             self.cpu_label = ctk.CTkLabel(
@@ -39,10 +40,14 @@ def create_dashboard():
                 font=("Helvetica", 24, "bold"),
                 text_color="#00FFCC",
             )
-            self.cpu_label.grid(row=0, column=0, pady=20)
+            self.cpu_label.grid(row=0, column=0, pady=(15, 5))
 
             self.ram_label = ctk.CTkLabel(self, text="RAM Usage: --%", font=("Helvetica", 18))
-            self.ram_label.grid(row=1, column=0, pady=10)
+            self.ram_label.grid(row=1, column=0, pady=(5, 2))
+
+            self.ram_progress = ctk.CTkProgressBar(self, width=220, height=10, progress_color="#00FFCC")
+            self.ram_progress.set(0)
+            self.ram_progress.grid(row=2, column=0, pady=(0, 15))
 
             self.bind_all("<Escape>", lambda event: self.destroy())
             self.update_telemetry()
@@ -56,6 +61,9 @@ def create_dashboard():
 
             self.cpu_label.configure(text=f"{status_icon} CPU Load: {cpu}%", text_color=cpu_color)
             self.ram_label.configure(text=f"RAM Usage: {ram}%")
+            self.ram_progress.set(min(max(ram / 100.0, 0.0), 1.0))
+            ram_color = "#FF3333" if ram > 80 else "#00FFCC"
+            self.ram_progress.configure(progress_color=ram_color)
             if self._after_id:
                 self.after_cancel(self._after_id)
             self._after_id = self.after(1500, self.update_telemetry)

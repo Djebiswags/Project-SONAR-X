@@ -19,6 +19,8 @@ def test_dashboard_creation_and_telemetry_normal_load():
             assert "🟢 CPU Load: 35.0%" in hud.cpu_label.cget("text")
             assert "RAM Usage: 50.0%" in hud.ram_label.cget("text")
             assert hud.cpu_label.cget("text_color") == "#00FFCC"
+            assert pytest.approx(hud.ram_progress.get()) == 0.5
+            assert hud.ram_progress.cget("progress_color") == "#00FFCC"
         finally:
             hud.destroy()
 
@@ -27,13 +29,15 @@ def test_dashboard_telemetry_high_load():
     with patch.object(dashboard.psutil, "cpu_percent", return_value=88.5), patch.object(
         dashboard.psutil, "virtual_memory"
     ) as mock_vm:
-        mock_vm.return_value.percent = 75.0
+        mock_vm.return_value.percent = 85.0
         hud = dashboard.create_dashboard()
 
         try:
             assert "🚨 CPU Load: 88.5%" in hud.cpu_label.cget("text")
-            assert "RAM Usage: 75.0%" in hud.ram_label.cget("text")
+            assert "RAM Usage: 85.0%" in hud.ram_label.cget("text")
             assert hud.cpu_label.cget("text_color") == "#FF3333"
+            assert pytest.approx(hud.ram_progress.get()) == 0.85
+            assert hud.ram_progress.cget("progress_color") == "#FF3333"
         finally:
             hud.destroy()
 
