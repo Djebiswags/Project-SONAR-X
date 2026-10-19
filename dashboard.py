@@ -41,7 +41,12 @@ def create_dashboard():
             )
             self.cpu_label.grid(row=0, column=0, pady=20)
 
-            self.ram_label = ctk.CTkLabel(self, text="RAM Usage: --%", font=("Helvetica", 18))
+            self.ram_label = ctk.CTkLabel(
+                self,
+                text="🟢 RAM Usage: --%",
+                font=("Helvetica", 18),
+                text_color="#00FFCC",
+            )
             self.ram_label.grid(row=1, column=0, pady=10)
 
             self.bind_all("<Escape>", lambda event: self.destroy())
@@ -50,12 +55,16 @@ def create_dashboard():
         def update_telemetry(self):
             cpu = psutil.cpu_percent()
             ram = psutil.virtual_memory().percent
-            is_high_load = cpu > 80
-            status_icon = "🚨" if is_high_load else "🟢"
-            cpu_color = "#FF3333" if is_high_load else "#00FFCC"
+            is_high_cpu = cpu > 80
+            cpu_status_icon = "🚨" if is_high_cpu else "🟢"
+            cpu_color = "#FF3333" if is_high_cpu else "#00FFCC"
 
-            self.cpu_label.configure(text=f"{status_icon} CPU Load: {cpu}%", text_color=cpu_color)
-            self.ram_label.configure(text=f"RAM Usage: {ram}%")
+            is_high_ram = ram > 80
+            ram_status_icon = "🚨" if is_high_ram else "🟢"
+            ram_color = "#FF3333" if is_high_ram else "#00FFCC"
+
+            self.cpu_label.configure(text=f"{cpu_status_icon} CPU Load: {cpu}%", text_color=cpu_color)
+            self.ram_label.configure(text=f"{ram_status_icon} RAM Usage: {ram}%", text_color=ram_color)
             if self._after_id:
                 self.after_cancel(self._after_id)
             self._after_id = self.after(1500, self.update_telemetry)
