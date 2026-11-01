@@ -38,6 +38,20 @@ def test_dashboard_telemetry_high_load():
             hud.destroy()
 
 
+def test_dashboard_has_escape_hint():
+    with patch.object(dashboard.psutil, "cpu_percent", return_value=20.0), patch.object(
+        dashboard.psutil, "virtual_memory"
+    ) as mock_vm:
+        mock_vm.return_value.percent = 30.0
+        hud = dashboard.create_dashboard()
+
+        try:
+            assert hasattr(hud, "hint_label")
+            assert hud.hint_label.cget("text") == "Press Esc to dismiss"
+        finally:
+            hud.destroy()
+
+
 def test_dashboard_escape_key_closes_window():
     with patch.object(dashboard.psutil, "cpu_percent", return_value=10.0), patch.object(
         dashboard.psutil, "virtual_memory"
