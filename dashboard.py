@@ -31,6 +31,7 @@ def create_dashboard():
 
             self.grid_rowconfigure(0, weight=1)
             self.grid_rowconfigure(1, weight=1)
+            self.grid_rowconfigure(2, weight=0)
             self.grid_columnconfigure(0, weight=1)
 
             self.cpu_label = ctk.CTkLabel(
@@ -43,6 +44,14 @@ def create_dashboard():
 
             self.ram_label = ctk.CTkLabel(self, text="RAM Usage: --%", font=("Helvetica", 18))
             self.ram_label.grid(row=1, column=0, pady=10)
+
+            self.hint_label = ctk.CTkLabel(
+                self,
+                text="Press Esc to dismiss",
+                font=("Helvetica", 11),
+                text_color="#9CA3AF",
+            )
+            self.hint_label.grid(row=2, column=0, pady=(0, 12))
 
             self.bind_all("<Escape>", lambda event: self.destroy())
             self.update_telemetry()
