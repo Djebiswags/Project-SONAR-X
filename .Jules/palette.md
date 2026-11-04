@@ -1,3 +1,7 @@
 ## 2025-05-18 - Multi-modal indicators and keyboard dismissal for telemetry HUDs
 **Learning:** In desktop telemetry HUDs (like CustomTkinter windows), color changes alone (e.g. red vs green text) fail accessibility guidelines (WCAG 1.4.1). Combining color changes with multi-modal visual indicators (such as distinct status emojis `🟢` / `🚨`) assists colorblind users. Additionally, utility overlay windows should bind the Escape key globally to enable keyboard-only dismissal, and cancel scheduled `.after()` jobs on teardown to prevent lingering Tcl callbacks.
 **Action:** When creating Tkinter/CustomTkinter HUDs or popups, always pair color indicators with symbol icons, bind `<Escape>` for keyboard dismissal, and override `destroy()` to cancel scheduled `after()` callbacks.
+
+## 2025-05-19 - Consistent multi-modal telemetry metrics and discoverable shortcut cues
+**Learning:** In multi-metric telemetry HUDs, applying accessible multi-modal indicators (status icon + high-contrast alert color) to only one metric (e.g., CPU) creates an inconsistent visual hierarchy and leaves secondary metrics (e.g., RAM) ambiguous for colorblind users. Furthermore, without an explicit visual cue (such as a subtle dismissal hint like "Press Esc to close"), keyboard accessibility shortcuts remain hidden and undiscoverable for users navigating without a mouse.
+**Action:** Ensure all sibling telemetry metrics follow consistent multi-modal status formatting (pairing alert symbols with color shifts), and always display a subtle visual keyboard hint on topmost utility overlays.
