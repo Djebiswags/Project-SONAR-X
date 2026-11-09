@@ -29,8 +29,9 @@ def create_dashboard():
             self.attributes("-topmost", True)
             self._after_id = None
 
-            self.grid_rowconfigure(0, weight=1)
-            self.grid_rowconfigure(1, weight=1)
+            self.grid_rowconfigure(0, weight=2)
+            self.grid_rowconfigure(1, weight=2)
+            self.grid_rowconfigure(2, weight=1)
             self.grid_columnconfigure(0, weight=1)
 
             self.cpu_label = ctk.CTkLabel(
@@ -39,10 +40,18 @@ def create_dashboard():
                 font=("Helvetica", 24, "bold"),
                 text_color="#00FFCC",
             )
-            self.cpu_label.grid(row=0, column=0, pady=20)
+            self.cpu_label.grid(row=0, column=0, pady=(15, 5))
 
             self.ram_label = ctk.CTkLabel(self, text="RAM Usage: --%", font=("Helvetica", 18))
-            self.ram_label.grid(row=1, column=0, pady=10)
+            self.ram_label.grid(row=1, column=0, pady=5)
+
+            self.hint_label = ctk.CTkLabel(
+                self,
+                text="Press Esc to close",
+                font=("Helvetica", 11),
+                text_color="#9E9E9E",
+            )
+            self.hint_label.grid(row=2, column=0, pady=(0, 10))
 
             self.bind_all("<Escape>", lambda event: self.destroy())
             self.update_telemetry()
