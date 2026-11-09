@@ -19,6 +19,7 @@ def test_dashboard_creation_and_telemetry_normal_load():
             assert "🟢 CPU Load: 35.0%" in hud.cpu_label.cget("text")
             assert "RAM Usage: 50.0%" in hud.ram_label.cget("text")
             assert hud.cpu_label.cget("text_color") == "#00FFCC"
+            assert hud.hint_label.cget("text") == "Press Esc to close"
         finally:
             hud.destroy()
 
